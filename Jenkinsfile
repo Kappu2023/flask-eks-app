@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "flask-eks-app"
         AWS_REGION = "ap-south-1"
-        ECR_REPO = "495737978491.dkr.ecr.ap-south-1.amazonaws.com"
+        ECR_REPO = "495737978491.dkr.ecr.ap-south-1.amazonaws.com/flask-eks-app"
     }
 
     stages {
