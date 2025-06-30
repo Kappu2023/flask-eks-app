@@ -17,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${ECR_REPO}:$BUILD_NUMBER")
+                    dockerImage = docker.build("495737978491.dkr.ecr.ap-south-1.amazonaws.com/flask-eks-app:$BUILD_NUMBER")
                 }
             }
         }
