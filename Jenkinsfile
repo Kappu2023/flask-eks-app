@@ -8,6 +8,12 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh "docker build -t ${ECR_REPO_URI}:${IMAGE_TAG} ."
