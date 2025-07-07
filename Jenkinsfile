@@ -37,7 +37,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
                     sh """
                         aws eks update-kubeconfig --region $AWS_REGION --name demo-cluster
-                        kubectl set image deployment/my-app-deployment my-app-container=${ECR_REPO_URI}:${IMAGE_TAG} --namespace=default
+                        kubectl set image deployment/flask-app flask-app=${ECR_REPO_URI}:${IMAGE_TAG} --namespace=default
                     """
                 }
             }
