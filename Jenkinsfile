@@ -8,9 +8,9 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
+        stage('Checkout SCM') {
             steps {
-                cleanWs()
+                git url: 'https://github.com/Kappu2023/flask-eks-app.git', branch: 'main'
             }
         }
 
@@ -19,7 +19,6 @@ pipeline {
                 sh "docker build -t ${ECR_REPO_URI}:${IMAGE_TAG} ."
             }
         }
-
         stage('Push to ECR') {
             steps {
                 sh """
