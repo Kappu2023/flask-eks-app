@@ -19,22 +19,27 @@ pipeline {
                 sh "docker build -t ${ECR_REPO_URI}:${IMAGE_TAG} ."
             }
         }
+
         stage('Push to ECR') {
             steps {
-                sh """
-                    aws ecr get-login-password --region $AWS_REGION | \
-                    docker login --username AWS --password-stdin $ECR_REPO_URI
-                    docker push ${ECR_REPO_URI}:${IMAGE_TAG}
-                """
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    sh """
+                        aws ecr get-login-password --region $AWS_REGION | \
+                        docker login --username AWS --password-stdin $ECR_REPO_URI
+                        docker push ${ECR_REPO_URI}:${IMAGE_TAG}
+                    """
+                }
             }
         }
 
         stage('Deploy to EKS') {
             steps {
-                sh """
-                    aws eks update-kubeconfig --region $AWS_REGION --name demo-cluster
-                    kubectl set image deployment/my-app-deployment my-app-container=${ECR_REPO_URI}:${IMAGE_TAG} --namespace=default
-                """
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    sh """
+                        aws eks update-kubeconfig --region $AWS_REGION --name demo-cluster
+                        kubectl set image deployment/my-app-deployment my-app-container=${ECR_REPO_URI}:${IMAGE_TAG} --namespace=default
+                    """
+                }
             }
         }
     }
